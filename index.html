@@ -4,17 +4,46 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <link rel="stylesheet" href="index.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
 
     <title>P-R-S @PanchoLoco</title>
   </head>
   <body>
+    <div class="container-fluid">
+    <div class="text-center">
     <div id="app">
-        <p>{{answer}}</p>
-        <button class="btn btn-primary">Enviar</p>
-
+        <div v-show="disabled==0">
+            <input type="text" v-model="name" class="form-control-sm"  :disabled="disabled==1" >
+            <button type="button" v-on:click="saveplayer">Guardar Nombre</button>
+        </div>
+       <p>{{winner}}</p>
+        <button class="btn btn-primary" v-on:click="playgame('rock')" :disabled="disabled==0">Piedra</button>
+        <button class="btn btn-primary" v-on:click="playgame('paper')" :disabled="disabled==0">Papel</button>
+        <button class="btn btn-primary" v-on:click="playgame('scissors')" :disabled="disabled==0">Tijera</button>
+        <table class="table-responsive table-scripe">
+            <thead>
+                <tr class="bg-primary text-white">
+                    <th>N° Partidas</th>                    
+                    <th>Jugador</th>
+                    <th>Computador</th>
+                    <th>Ganador</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(resultado, index) in results" :key="index">
+                    <td>{{index+1}}</td>
+                    <td>{{resultado.player}}</td>
+                    <td>{{resultado.computer}}</td>
+                    <td>{{resultado.winner}}</td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
     </div>
     <!-- Optional JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
