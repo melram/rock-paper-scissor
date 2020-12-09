@@ -13,11 +13,13 @@ var AppSPR = new Vue({
   methods: {
     playgame(player) {
       computer = this.options[Math.floor(Math.random() * 3)];
+      this.cpuoption = computer;
+      this.player = player;
       switch (player + computer) {
         case "rockscissors":
         case "paperrock":
         case "scissorspaper":
-          this.winner = "El Ganador es:" + this.name;
+          this.winner = this.name;
           this.results.push({
             player: player,
             computer: computer,
@@ -27,17 +29,21 @@ var AppSPR = new Vue({
         case "rockpaper":
         case "paperscissors":
         case "scissorsrock":
-          this.winner = "El Ganador es: La computadora";
+          this.winner = "computer";
+          this.player = player;
+          this.cpuoption = computer;
           this.results.push({
             player: player,
             computer: computer,
-            winner: "Computer",
+            winner: "Computadora",
           });
           break;
         case "rockrock":
         case "paperpaper":
         case "scissorsscissors":
-          this.winner = "Empate sigamos jugando...";
+          this.winner = "empate";
+          this.player = player;
+          this.cpuoption = computer;
           this.results.push({
             player: player,
             computer: computer,
@@ -48,6 +54,34 @@ var AppSPR = new Vue({
     },
     saveplayer() {
       this.disabled = 1;
+    },
+  },
+  computed: {
+    totalempates() {
+      const resitem = this.results
+        .filter((x) => x.winner === "Empate")
+        .reduce((sum, item) => (sum += 1), 0);
+      //console.log(resitem);
+      return resitem;
+    },
+    totalplayer() {
+      const resitem = this.results
+        .filter((x) => x.winner === this.name)
+        .reduce((sum, item) => (sum += 1), 0);
+      //console.log(resitem);
+      return resitem;
+    },
+    totalcomputer() {
+      const resitem = this.results
+        .filter((x) => x.winner === "Computadora")
+        .reduce((sum, item) => (sum += 1), 0);
+      //console.log(resitem);
+      return resitem;
+    },
+    totalpartidas() {
+      const resitem = this.results.reduce((sum, item) => (sum += 1), 0);
+      //console.log(resitem);
+      return resitem;
     },
   },
 });

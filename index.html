@@ -7,43 +7,167 @@
     <link rel="stylesheet" href="index.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    
-
     <title>P-R-S @PanchoLoco</title>
   </head>
-  <body>
-    <div class="container-fluid">
-    <div class="text-center">
-    <div id="app">
-        <div v-show="disabled==0">
-            <input type="text" v-model="name" class="form-control-sm"  :disabled="disabled==1" >
-            <button type="button" v-on:click="saveplayer">Guardar Nombre</button>
-        </div>
-       <p>{{winner}}</p>
-        <button class="btn btn-primary" v-on:click="playgame('rock')" :disabled="disabled==0">Piedra</button>
-        <button class="btn btn-primary" v-on:click="playgame('paper')" :disabled="disabled==0">Papel</button>
-        <button class="btn btn-primary" v-on:click="playgame('scissors')" :disabled="disabled==0">Tijera</button>
-        <table class="table-responsive table-scripe">
-            <thead>
-                <tr class="bg-primary text-white">
-                    <th>N° Partidas</th>                    
-                    <th>Jugador</th>
-                    <th>Computador</th>
-                    <th>Ganador</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(resultado, index) in results" :key="index">
-                    <td>{{index+1}}</td>
-                    <td>{{resultado.player}}</td>
-                    <td>{{resultado.computer}}</td>
-                    <td>{{resultado.winner}}</td>
+  <body>   
+ <div id="app" class="section">
+    <div class="container d-flex align-items-center">
+   
+
+        <div class="row">
+            <div class="col-lg-5 justify-content-xs-center border-panel">
+                <div class="row">
+                <div class="col-md-12 text-center ">
+                   
+                    <div class="border-panel margin-panel">
+                        Computadora: Mr.Robots 🤖
+                        <ul class="list-inline">
+                            <li class="list-inline-item" v-show="cpuoption==='rock'">
+                                <img class="img-fluid" src="img/rock.svg" width="50px" height="50px"  alt="supported-services">
+                            </li>
+                            <li class="list-inline-item" v-show="cpuoption==='paper'">
+                                <img class="img-fluid" src="img/paper.svg" width="50px" height="50px" alt="supported-services">
+                             </li>
+                            <li class="list-inline-item" v-show="cpuoption==='scissors'">
+                                <img class="img-fluid" src="img/scissor.svg" width="50px" height="50px" alt="supported-services">
+                            </li>
+                            <li class="list-inline-item" v-show="cpuoption=='' || cpuoption==null">
+                                <h1>🤖</h1>
+                                Juguemos                                
+                            </li>
+                        </ul>
+					</div>                   
+                </div>
+                <div class="col-md-12 text-center margin-panel">
+                    <div class="border-panel">Total de Partidas:<strong class="text-danger">{{totalpartidas}}</strong>
+                        <div class="row">
+                            <div class="col-md-4">
+                                Mr.Robots 🤖<br>
+                                <h3 class="text-danger">{{totalcomputer}}</h3>
+                            </div>
+                            
+        
+                            <div class="col-md-4">
+                                <p v-show="winner==name && name!=''"><strong>Ganador</strong><br>{{winner}}😎🕹</p>
+                                <p v-show="winner=='computer'"><strong>Ganador</strong><br>Mr.Robots 🤖<br></p>
+                                <p v-show="winner=='empate'"><strong>No hay Ganador</strong><br>Empate ❌</p>
+                                <p v-show="winner==''">...</p>
+
+                                
+
+                                Empates:<strong class="text-danger">{{totalempates}}</strong>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                {{name}} 😎🕹<br>
+                                <h3 class="text-danger">{{totalplayer}}</h3>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="col-md-12 text-center margin-panel">
+                  
+                    <div v-if="disabled==0" class="border-panel">
+                        <div class="form-group">
+                           <label for="namePlayer">Jugador: {{name}}😎🕹</label>
+                           <div class="input-group">
+                                <input type="text" id="namePlayer" class="form-control form-control-sm" placeholder="Nombre del Jugador" aria-describedby="namePlayer"  v-model="name"  :disabled="disabled==1" >
+                                    <button type="button" class="btn btn-sm btn-primary" v-on:click="saveplayer">Guardar</button>
+                            </div>                           
+                        </div>
+                    </div>
+                
+                    <div v-else class="border-panel text-center">
+                        <ul class="list-inline">
+                            <li class="list-inline-item" v-show="player==='rock'">
+                                <img class="img-fluid" src="img/rock.svg" width="50px" height="50px"  alt="supported-services">
+                            </li>
+                            <li class="list-inline-item" v-show="player==='paper'">
+                                <img class="img-fluid" src="img/paper.svg" width="50px" height="50px" alt="supported-services">
+                             </li>
+                            <li class="list-inline-item" v-show="player==='scissors'">
+                                <img class="img-fluid" src="img/scissor.svg" width="50px" height="50px" alt="supported-services">
+                            </li>
+                        </ul>
+                        <label>Jugador: {{name}}😎🕹</label>
                     
-                </tr>
-            </tbody>
-        </table>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                    <button class="btn btn-default" v-on:click="playgame('rock')" :disabled="disabled==0"> <img class="img-fluid" src="img/rock.svg" width="50px" height="50px"  alt="supported-services"><br>Piedra</button>
+                            </li>
+                            <li class="list-inline-item">
+                    <button class="btn btn-default" v-on:click="playgame('paper')" :disabled="disabled==0"> <img class="img-fluid" src="img/paper.svg" width="50px" height="50px" alt="supported-services"> <br>Papel</button>
+                </li><li class="list-inline-item">
+                    <button class="btn btn-default" v-on:click="playgame('scissors')" :disabled="disabled==0"> <img class="img-fluid" src="img/scissor.svg" width="50px" height="50px" alt="supported-services"><br>
+                    Tijera</button>
+                </li>
+                    </div>
+                
+            </div>  
+                
+                </div>
+            </div>
+            <div class="col-lg-7 align-self-center">
+				<div class="block">
+					<div class="logo">
+                      <img class="img-fluid" src="img/creater.jpg" width="50px" height="50px" alt="supported-services">   
+					</div>
+					<h1>Rock-Paper-Scissors Mr.Robots 🤖 
+						<br>El juego favorito de todos</h1>
+					<p>
+						Una partida rapida para entretenerse, 
+						<br>escoge tu estrategia contra tu oponente,
+						<br>ya que,Mr.Robots 🤖 no te dejara ganar.
+					</p>
+					
+					<div class="support">
+                        
+                    </div>
+                    <ul class="list-inline">
+						<li class="list-inline-item">
+							<a href="#"><img src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjUwMCIgaGVpZ2h0PSIyMTU4IiB2aWV3Qm94PSIwIDAgMjU2IDIyMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pbllNaW4gbWVldCI+PHBhdGggZD0iTTIwNC44IDBIMjU2TDEyOCAyMjAuOCAwIDBoOTcuOTJMMTI4IDUxLjIgMTU3LjQ0IDBoNDcuMzZ6IiBmaWxsPSIjNDFCODgzIi8+PHBhdGggZD0iTTAgMGwxMjggMjIwLjhMMjU2IDBoLTUxLjJMMTI4IDEzMi40OCA1MC41NiAwSDB6IiBmaWxsPSIjNDFCODgzIi8+PHBhdGggZD0iTTUwLjU2IDBMMTI4IDEzMy4xMiAyMDQuOCAwaC00Ny4zNkwxMjggNTEuMiA5Ny45MiAwSDUwLjU2eiIgZmlsbD0iIzM1NDk1RSIvPgoJPG1ldGFkYXRhPgoJCTxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgeG1sbnM6cmRmcz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wMS9yZGYtc2NoZW1hIyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIj4KCQkJPHJkZjpEZXNjcmlwdGlvbiBhYm91dD0iaHR0cHM6Ly9pY29uc2NvdXQuY29tL2xlZ2FsI2xpY2Vuc2VzIiBkYzp0aXRsZT0idnVlLTktY29tcGFueS1icmFuZC1sb2dvIiBkYzpkZXNjcmlwdGlvbj0idnVlLTktY29tcGFueS1icmFuZC1sb2dvIiBkYzpwdWJsaXNoZXI9Ikljb25zY291dCIgZGM6ZGF0ZT0iMjAxNy0wNy0xMiIgZGM6Zm9ybWF0PSJpbWFnZS9zdmcreG1sIiBkYzpsYW5ndWFnZT0iZW4iPgoJCQkJPGRjOmNyZWF0b3I+CgkJCQkJPHJkZjpCYWc+CgkJCQkJCTxyZGY6bGk+SWNvbiBNYWZpYTwvcmRmOmxpPgoJCQkJCTwvcmRmOkJhZz4KCQkJCTwvZGM6Y3JlYXRvcj4KCQkJPC9yZGY6RGVzY3JpcHRpb24+CgkJPC9yZGY6UkRGPgogICAgPC9tZXRhZGF0YT48L3N2Zz4K" width="50px" height="50px" alt="Vuejs"></a>
+						</li>
+						<li class="list-inline-item">
+                            <a href="#"><img src="data:image/svg+xml;utf8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGFyaWEtbGFiZWw9IkhUTUw1IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+PHBhdGggZmlsbD0iI2UzNGYyNiIgZD0iTTcxIDQ2MEwzMCAwaDQ1MWwtNDEgNDYwLTE4NSA1MiIvPjxwYXRoIGZpbGw9IiNlZjY1MmEiIGQ9Ik0yNTYgNDcybDE0OS00MSAzNS0zOTRIMjU2Ii8+PHBhdGggZmlsbD0iI2ViZWJlYiIgZD0iTTI1NiAyMDhoLTc1bC01LTU4aDgwVjk0SDExNGwxNSAxNzFoMTI3em0tMSAxNDdsLTYzLTE3LTQtNDVoLTU2bDcgODkgMTE2IDMyeiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0yNTUgMjA4djU3aDcwbC03IDczLTYzIDE3djU5bDExNi0zMiAxNi0xNzR6bTAtMTE0djU2aDEzN2w1LTU2eiIvPjwvc3ZnPg==" width="50px" height="50px" alt="HTML"></a>
+                            
+                          
+                            
+                        </li>
+                        <li class="list-inline-item"> <a href="#"><img src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjUwMCIgaGVpZ2h0PSIyNTAwIiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pbllNaW4gbWVldCI+PHBhdGggZD0iTTAgMjIyLjk5MUMwIDI0MS4yMjMgMTQuNzc5IDI1NiAzMy4wMDkgMjU2SDIyMi45OUMyNDEuMjIzIDI1NiAyNTYgMjQxLjIyMSAyNTYgMjIyLjk5MVYzMy4wMUMyNTYgMTQuNzc3IDI0MS4yMjEgMCAyMjIuOTkxIDBIMzMuMDFDMTQuNzc3IDAgMCAxNC43NzkgMCAzMy4wMDlWMjIyLjk5eiIgZmlsbD0iIzU2M0Q3QyIvPjxwYXRoIGQ9Ik0xMDYuMTU4IDExMy4yMzhWNzYuOTg1aDMxLjkxMWMzLjA0IDAgNS45Ny4yNTMgOC43OTIuNzYgMi44MjIuNTA2IDUuMzE5IDEuNDEgNy40OSAyLjcxMyAyLjE3IDEuMzAzIDMuOTA3IDMuMTEyIDUuMjEgNS40MjcgMS4zMDIgMi4zMTYgMS45NTQgNS4yODMgMS45NTQgOC45IDAgNi41MTMtMS45NTQgMTEuMjE3LTUuODYyIDE0LjExMS0zLjkwNyAyLjg5NS04LjkgNC4zNDItMTQuOTc5IDQuMzQyaC0zNC41MTZ6TTcyLjA3NSA1MC41djE1NWg3NS4xMTJjNi45NDcgMCAxMy43MTMtLjg2OCAyMC4yOTgtMi42MDUgNi41ODUtMS43MzcgMTIuNDQ2LTQuNDE0IDE3LjU4NC04LjAzMiA1LjEzNy0zLjYxOCA5LjIyNi04LjI4NiAxMi4yNjUtMTQuMDAyIDMuMDQtNS43MTcgNC41NTktMTIuNDgzIDQuNTU5LTIwLjI5OCAwLTkuNjk3LTIuMzUyLTE3Ljk4Mi03LjA1NS0yNC44NTYtNC43MDQtNi44NzUtMTEuODMyLTExLjY4Ny0yMS4zODQtMTQuNDM3IDYuOTQ3LTMuMzI4IDEyLjE5NC03LjU5OCAxNS43NC0xMi44MDggMy41NDUtNS4yMSA1LjMxOC0xMS43MjIgNS4zMTgtMTkuNTM4IDAtNy4yMzYtMS4xOTQtMTMuMzE0LTMuNTgyLTE4LjIzNS0yLjM4OC00LjkyLTUuNzUzLTguODY0LTEwLjA5NS0xMS44MzEtNC4zNDEtMi45NjctOS41NTEtNS4xMDItMTUuNjMtNi40MDQtNi4wNzgtMS4zMDMtMTIuODA4LTEuOTU0LTIwLjE4OS0xLjk1NEg3Mi4wNzV6bTM0LjA4MyAxMjguNTE1di00Mi41NDloMzcuMTIxYzcuMzgxIDAgMTMuMzE1IDEuNyAxNy44MDIgNS4xMDIgNC40ODYgMy40MDEgNi43MyA5LjA4MSA2LjczIDE3LjA0MSAwIDQuMDUzLS42ODggNy4zODEtMi4wNjMgOS45ODYtMS4zNzUgMi42MDUtMy4yMiA0LjY2OC01LjUzNiA2LjE4Ny0yLjMxNSAxLjUyLTQuOTkzIDIuNjA1LTguMDMyIDMuMjU3LTMuMDQuNjUtNi4yMjMuOTc2LTkuNTUyLjk3NmgtMzYuNDd6IiBmaWxsPSIjRkZGIi8+Cgk8bWV0YWRhdGE+CgkJPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIiB4bWxuczpyZGZzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzAxL3JkZi1zY2hlbWEjIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iPgoJCQk8cmRmOkRlc2NyaXB0aW9uIGFib3V0PSJodHRwczovL2ljb25zY291dC5jb20vbGVnYWwjbGljZW5zZXMiIGRjOnRpdGxlPSJib290c3RyYXAtNCIgZGM6ZGVzY3JpcHRpb249ImJvb3RzdHJhcC00IiBkYzpwdWJsaXNoZXI9Ikljb25zY291dCIgZGM6ZGF0ZT0iMjAxNy0wNi0xNyIgZGM6Zm9ybWF0PSJpbWFnZS9zdmcreG1sIiBkYzpsYW5ndWFnZT0iZW4iPgoJCQkJPGRjOmNyZWF0b3I+CgkJCQkJPHJkZjpCYWc+CgkJCQkJCTxyZGY6bGk+SWNvbiBNYWZpYTwvcmRmOmxpPgoJCQkJCTwvcmRmOkJhZz4KCQkJCTwvZGM6Y3JlYXRvcj4KCQkJPC9yZGY6RGVzY3JpcHRpb24+CgkJPC9yZGY6UkRGPgogICAgPC9tZXRhZGF0YT48L3N2Zz4K" width="50px" height="50px" alt="HTML"></a></li>
+                    </ul>
+                    <div class="support">
+						<a href="https://github.com/melram/rock">@PanchoLoco</a>
+					</div>
+				</div>
+            </div>
+            <div id="historial" class="col-lg-12 table-responsive resultado text-center">
+                <h5>Historial de partidas:</h5>
+                <table class="table table-striped table-bordered table-hover">
+                       <thead  class="bg-primary text-white">
+                           <tr>
+                               <th>N° Partidas</th>                    
+                               <th>Jugador</th>
+                               <th>Computador</th>
+                               <th>Ganador</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           <tr v-for="(resultado, index) in results" :key="index">
+                               <td>{{index+1}}</td>
+                               <td>{{resultado.player}}</td>
+                               <td>{{resultado.computer}}</td>
+                               <td>{{resultado.winner}}</td>
+                           </tr>
+                       </tbody>
+                   </table>
+           </div>
+       
+       
+        </div>
     </div>
-</div>
+
     </div>
     <!-- Optional JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
